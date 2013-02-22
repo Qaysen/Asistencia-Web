@@ -10,17 +10,22 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
         <style>
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
         </style>
+
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css">
         <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="{{STATIC_URL}}css/main.css">
+        <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-editable.css"> 
+        <link rel="stylesheet" href="{{STATIC_URL}}css/datepicker.css" />
+       
 
-        <script src="{{STATIC_URL}}js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -79,13 +84,14 @@
             </footer>
 
         </div> <!-- /container -->
-
+        <script src="{{STATIC_URL}}js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="{{STATIC_URL}}js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-
         <script src="{{STATIC_URL}}js/vendor/bootstrap.min.js"></script>
-
+       
         <script src="{{STATIC_URL}}js/main.js"></script>
+        <script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
+        <script src="{{STATIC_URL}}js/jquery.mockjax.js"></script> 
 
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
@@ -93,5 +99,42 @@
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
+
+         <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+            $(document).on("ready", setup);
+              function setup(){
+                $.ajaxSetup({
+                  beforeSend: function(xhr, settings) {
+                    function getCookie(name) {
+                      var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                          var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                              var cookie = jQuery.trim(cookies[i]);
+                              // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                                }
+                            }
+                        }
+                    return cookieValue;
+                    }
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                  // Only send the token to relative URLs i.e. locally.
+                      xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                  }
+                });
+              }
+
+        </script>
+
+        {% block script %}{% endblock %}
+
     </body>
 </html>
