@@ -30,7 +30,6 @@ class Control(models.Model):
 class Turno(models.Model):
 	nombre = models.CharField(max_length=100)
 	hora_turno = models.TimeField()
-
 	def __unicode__(self):
 		return self.nombre
 
