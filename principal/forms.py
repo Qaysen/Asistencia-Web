@@ -1,3 +1,4 @@
+from principal.models import *
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django import forms
@@ -16,3 +17,13 @@ class EditarUserFormAdm(ModelForm):
     class Meta:
         model = User
         exclude = ("is_staff","is_superuser","last_login", "groups", "user_permissions", "date_joined", 'password', 'password1', 'password2')
+
+
+
+
+
+
+class UsuarioTurnoForm(ModelForm):
+    class Meta:
+        model=UsuarioTurno
+
