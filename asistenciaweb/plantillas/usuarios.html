@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block titulo %}
+Usuarios
+{% endblock titulo %}
+{% block contenido %}
+
+<ul class="breadcrumb">
+  <li><a href="/">Sistema</a> <span class="divider">/</span></li>
+  <li class="active">Usuarios</li>
+</ul>
+
+
+<div class="box-header" data-original-title>
+  <h2><i class="icon-user"></i><span class="break"></span>Usuarios</h2>
+  <div class="box-icon">
+    <span class="break"></span>
+    <a href="registrar/"><i class="icon-user"></i>Nuevo Usuario</a>
+  </div>
+</div>
+
+<div class="box-content">
+    <table class="table table-striped table-bordered" id="example">
+      <thead>
+        <tr>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>   
+      <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+          <td>{{usuario.first_name}}</td>
+          <td>{{usuario.last_name}}</td>
+          <td>{{usuario.username}}</td>
+          <td>{{usuario.email}}</td>
+          <td>
+            {% if usuario.is_active %}
+              Activo
+            {% else %} 
+              Inactivo
+            {% endif %}
+              
+
+          </td>
+
+          <td class="center" style="width:180px; text-align:center;">
+            <button class="btn btn-success mostrar" value="{{usuario.id}}" >
+            
+            <i class="icon-zoom-in icon-white"></i>
+            </button>
+            <a class="btn btn-info" href="/usuarios/editar/{{usuario.id}}">
+
+              <i class="icon-edit icon-white"></i>
+            </a>
+<!--          
+            <a class="btn btn-danger" href="/usuarios/{{usuario.id}}/perfiles">
+              <i class="icon-user icon-white"></i>
+            </a>
+-->
+            <button class="btn btn-warning cambiar" value="{{usuario.id}}"><i class="icon-white icon-refresh"></i></button>
+            <!--<a class="btn btn-warning"><i class="icon-white icon-refresh"></i></a>-->
+          </td> 
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+ </div> 
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-header">      
+       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3 id="myModalLabel"></h3>
+    </div>
+    <div class="modal-body">  
+    </div>    
+    <div class="modal-footer">
+      
+    </div>
+</div>
+
+{% endblock contenido %}
+
+{% block script %}
+  <script >
+$(document).on("ready",verusuario);
+
+function verusuario()
+{
+  $(".mostrar").on("click",evento);
+}
+    
+function evento()
+{
+  var id=$(this).val(); 
+
+
+  $("#myModal").load('/ajax_ver_usuario/{{id}}', function() { // load the url into the modal
+      $(this).modal('show'); // display the modal on url load
+  });
+
+  $.ajax({
+    data:{'id_usuario':id},
+    type:"get",
+    url:'/ajax_ver_usuario/',
+    
+    success:function(data)
+    {  
+    $("#myModalLabel").html('<div>Datos de Usuario</div>');  
+    $(".modal-body").html('<div>Usuario:   '+data.user+'</div><div>Nombre:   '+data.nombre+'</div><div>Apellido:   '+data.apellido+'</div><div>Email:   '+data.email+'</div><div>Direccion:   '+data.direccion+'</div><div>Telefono:   '+data.telefono+'</div>');
+   
+    }
+  }); 
+
+}
+
+</script>
+
+<script>
+$(document).on("ready", inicio);
+$(document).on("ready", setup);
+  function setup(){
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        function getCookie(name) {
+          var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+              var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                    }
+                }
+            }
+        return cookieValue;
+        }
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+      // Only send the token to relative URLs i.e. locally.
+          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+      }
+    });
+  }
+  
+  function inicio(){
+    $(".cambiar").on("click",cambiarclave);
+  }
+  function cambiarclave(){
+    var id=$(this).val();
+    $("#myModal").modal('show');
+    $.ajax({
+      data:{'id':id},
+      type:"post",
+      url:"/resetear_clave/",
+      success: function(dato){
+        $("#myModalLabel").html('<div>Mensaje de Confirmación</div>');
+        $(".modal-body").html('<div>La cotraseña del usuario '+ dato +' ha sido reseteada con éxito</div>');
+        
+      },
+      error:function(){
+        $("#myModalLabel").html('<div>Mensaje de error</div>');
+        $(".modal-body").html('<div>Este usuario no existe</div>');
+    }
+
+    });
+  }
+
+</script>
+{% endblock script %}

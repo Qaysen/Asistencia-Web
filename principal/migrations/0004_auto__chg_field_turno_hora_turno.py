@@ -8,56 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Descuento'
-        db.create_table('principal_descuento', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('magnitud', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('porcentaje', self.gf('django.db.models.fields.FloatField')()),
-            ('fecha_inicio', self.gf('django.db.models.fields.DateField')()),
-            ('fecha_termino', self.gf('django.db.models.fields.DateField')()),
-        ))
-        db.send_create_signal('principal', ['Descuento'])
 
-        # Adding model 'UsuarioTurno'
-        db.create_table('principal_usuarioturno', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('fecha_inicio', self.gf('django.db.models.fields.DateField')()),
-            ('fecha_termino', self.gf('django.db.models.fields.DateField')()),
-            ('usuario', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('turno', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['principal.Turno'])),
-        ))
-        db.send_create_signal('principal', ['UsuarioTurno'])
-
-        # Adding model 'Turno'
-        db.create_table('principal_turno', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('hora_turno', self.gf('django.db.models.fields.TimeField')()),
-        ))
-        db.send_create_signal('principal', ['Turno'])
-
-        # Adding model 'Control'
-        db.create_table('principal_control', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('fecha_ingreso', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('fecha_salida', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('usuario', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-        ))
-        db.send_create_signal('principal', ['Control'])
-
+        # Changing field 'Turno.hora_turno'
+        db.alter_column('principal_turno', 'hora_turno', self.gf('django.db.models.fields.DateField')())
 
     def backwards(self, orm):
-        # Deleting model 'Descuento'
-        db.delete_table('principal_descuento')
 
-        # Deleting model 'UsuarioTurno'
-        db.delete_table('principal_usuarioturno')
-
-        # Deleting model 'Turno'
-        db.delete_table('principal_turno')
-
-        # Deleting model 'Control'
-        db.delete_table('principal_control')
-
+        # Changing field 'Turno.hora_turno'
+        db.alter_column('principal_turno', 'hora_turno', self.gf('django.db.models.fields.TimeField')())
 
     models = {
         'auth.group': {
@@ -119,8 +77,9 @@ class Migration(SchemaMigration):
         },
         'principal.turno': {
             'Meta': {'object_name': 'Turno'},
-            'hora_turno': ('django.db.models.fields.TimeField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'hora_turno': ('django.db.models.fields.DateField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'principal.usuarioturno': {
             'Meta': {'object_name': 'UsuarioTurno'},

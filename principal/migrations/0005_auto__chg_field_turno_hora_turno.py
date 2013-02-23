@@ -8,16 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Turno.nombre'
-        db.add_column('principal_turno', 'nombre',
-                      self.gf('django.db.models.fields.CharField')(default=datetime.datetime(2013, 2, 19, 0, 0), max_length=100),
-                      keep_default=False)
 
+        # Changing field 'Turno.hora_turno'
+        db.alter_column('principal_turno', 'hora_turno', self.gf('django.db.models.fields.TimeField')())
 
     def backwards(self, orm):
-        # Deleting field 'Turno.nombre'
-        db.delete_column('principal_turno', 'nombre')
 
+        # Changing field 'Turno.hora_turno'
+        db.alter_column('principal_turno', 'hora_turno', self.gf('django.db.models.fields.DateField')())
 
     models = {
         'auth.group': {

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block titulo %}
+ Turno
+{% endblock titulo %}
+{% block contenido %}
+
+<ul class="breadcrumb">
+  <li><a href="/">Asistencia-Web</a> <span class="divider">/</span></li>
+  <li class="active">Turno</li>
+</ul>
+
+<div class="box-header" data-original-title>
+  <h2><span class="break"></span>Turnos</h2>
+  <div class="box-icon">
+    <span class="break"></span>    
+    <a id="new_turno"><i class="icon-user"></i>Nuevo Turno</a>
+  </div>
+</div>
+<div class="box-content">
+    <table class="table table-striped table-bordered" id="example">
+      <thead>
+        <tr>
+          <th>Nombre_Turno</th>
+          <th>Hora_Turno</th>
+          <th>Editar</th>  
+          <th>Eliminar</th>
+        </tr>
+      </thead> 
+      <tbody>
+        <tr></tr>
+        {% for turnos in turno %}
+        <tr>         
+          <td><a class="tipo" data-type="select" data-pk="{{turnos.id}}" data-url="/edit_nombre/" class="editable-click" >{{turnos.nombre}}</a></td>
+          <td>{{turnos.hora_turno}}</td>          
+          <td><a class="edit" href="">Edit</a></td>
+          <td><a class="eliminar">Eliminar</a>
+          <input type="hidden" value="{{turnos.id}}"></td> 
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+ </div> 
+
+ {% endblock contenido %}
+
+{% block script %}
+ 
+<script>
+$.fn.editable.defaults.mode="inline";
+
+ $(document).on("ready", inicio);
+
+ function inicio()
+ {
+  $('#new_turno').on('click', mostrarForm);
+  $('.eliminar').on('click', eliminar_turno);
+
+  $('.tipo').editable({      
+      source: [
+      {value: 'Operario', text: 'Operario'},
+      {value: 'Supervisor', text: 'Supervisor'},
+      {value: 'Administrador', text: 'Administrador'}
+      ]
+  });
+ } 
+
+ function eliminar_turno(){
+  var $this = $(this);
+  var info = $(this).parent().children('input').val();
+  console.log(info);
+
+  $.ajax(
+    {
+      url: '/ajax/eliminar-turno/',
+      data: {'pk':info},
+      type:'POST',
+      success: function(data){
+        $this.parent().parent().hide('slow');
+      }
+    });
+ }
+
+
+ function mostrarForm(){
+  html = '<tr id="nuevo_turno">';
+  html += '<form id="agregar_turno">';
+  html += "{% csrf_token %}";
+  html += ' <td><input type="text" id="id_user" name ="nombre" /> </td>';
+  html += ' <td><input type="text" id="id_hora_turno" name ="hora_turno"/> </td>';
+  html += '<td><a id="enviar"> Guardar </a></td>';
+  html += '<td> Eliminar </td>';
+  html += '</form>';
+  html += '</tr>';
+
+     if($('#nuevo_turno').length ){
+        alert("Tienes que Guardar");
+     }
+     else
+     { 
+      $('tbody tr').first().after(html);
+    }
+    $("#enviar").on('click', agregarTurno);
+    //$('.dp2').datepicker();
+ }
+
+function operacion(data){
+  
+  $('#nuevo_turno').html("<td>"+data.nombre+"</td><td>"+data.hora_turno+"</td><td>editar</td><td><input type='hidden' value='"+data.pk+"'><a class='eliminar'>Eliminar</a></td>");
+  $('#nuevo_turno').removeAttr("id");
+  $('.eliminar').on('click',eliminar_turno);
+  console.log(data);
+}
+
+function fallo(data){
+  console.log(data);
+}
+
+function agregarTurno(){
+  $.ajax ({
+    url: '/ajax/agregar-turno/',
+    data: $('#agregar_turno').serialize(),
+    type:'POST',
+    success: operacion,
+    error: fallo
+
+  }
+    );
+}
+
+
+ $(document).on("ready", setup);
+  function setup(){
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        function getCookie(name) {
+          var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+              var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                    }
+                }
+            }
+        return cookieValue;
+        }
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+      // Only send the token to relative URLs i.e. locally.
+          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+      }
+    });
+  }
+</script>
+
+ {% endblock script %}
