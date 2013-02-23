@@ -6,7 +6,6 @@ from django.template import RequestContext
 from principal.forms import UsuarioTurnoForm
 from django.utils import simplejson as json 
 
-
 def usuarioTurno(request):
 	usuarioTurno = UsuarioTurno.objects.all()
 	usuarios=User.objects.all()
@@ -20,7 +19,6 @@ def edit_fechas(request):
 	filtrar={campo:dato}
 	UsuarioTurno.objects.filter(pk=clave).update(**filtrar)
 	return HttpResponse(True)
-
 
 def edit_usuario(request):
 	clave=request.POST["pk"]
@@ -41,7 +39,6 @@ def eliminarUT(request):
 		dato="No es ajax"
 	return HttpResponse(dato)
 
-
 def agregarUT(request):	
 	data="valor inicial"
 	if request.is_ajax():
@@ -50,7 +47,11 @@ def agregarUT(request):
 			if formulario.is_valid():
 				formulario.save()
 				ut=UsuarioTurno.objects.latest("id")
-				data=json.dumps({'usuario':ut.usuario_id,'turno':ut.turno_id,'fecha_inicio':str(ut.fecha_inicio),'fecha_termino':str(ut.fecha_termino)})
+				data=json.dumps({'usuario':str(ut.usuario),'turno':str(ut.turno),'fecha_inicio':str(ut.fecha_inicio),'fecha_termino':str(ut.fecha_termino)})
+			else:
+				data="formulario no valido"
+		else:
+			data="Error"
 	else:
 		data="Respuesta no es ajax"
 	return HttpResponse(data,mimetype='application/json')
@@ -58,10 +59,4 @@ def agregarUT(request):
 def ver_usuarios(request):	
     usuarios = User.objects.filter(**qdct_as_kwargs(request.POST)).order_by('id') 
     #return JSONResponse with id and name
-    return JSONResponse(usuarios.values('id','username'))
-
-
-
-
- 
-   
+    return JSONResponse(usuarios.values('id','username')) 

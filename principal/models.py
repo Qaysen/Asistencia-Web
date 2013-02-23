@@ -34,7 +34,6 @@ class Turno(models.Model):
 	def __unicode__(self):
 		return self.nombre
 
-
 class UsuarioTurno(models.Model):
 	fecha_inicio = models.DateField()
 	fecha_termino = models.DateField()

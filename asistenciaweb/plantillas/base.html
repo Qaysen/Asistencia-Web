@@ -9,7 +9,6 @@
         <title>{% block titulo %}{% endblock titulo %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-
         <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
         <style>
             body {
@@ -17,15 +16,11 @@
                 padding-bottom: 40px;
             }
         </style>
-
         <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css">
         <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="{{STATIC_URL}}css/main.css">
         <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-editable.css"> 
-        <link rel="stylesheet" href="{{STATIC_URL}}css/datepicker.css" />
-       
-
-        
+        <link rel="stylesheet" href="{{STATIC_URL}}css/datepicker.css" />     
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -33,7 +28,6 @@
         <![endif]-->
 
         <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
-
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -78,28 +72,23 @@
             {% endblock contenido %}
 
             <hr>
-
             <footer>
                 <p>&copy; Company 2012</p>
             </footer>
-
         </div> <!-- /container -->
         <script src="{{STATIC_URL}}js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="{{STATIC_URL}}js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
         <script src="{{STATIC_URL}}js/vendor/bootstrap.min.js"></script>
-       
         <script src="{{STATIC_URL}}js/main.js"></script>
         <script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
         <script src="{{STATIC_URL}}js/jquery.mockjax.js"></script> 
-
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
-
          <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -131,7 +120,6 @@
                   }
                 });
               }
-
         </script>
 
         {% block script %}{% endblock %}
