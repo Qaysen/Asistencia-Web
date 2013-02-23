@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block titulo %}
+Editando usuario {{usuario.username|capfirst}}
+{% endblock titulo %}
+{% block contenido %}
+
+<div class="row">
+  <ul class="breadcrumb">
+    <li><a href="/">Sisgedo</a> <span class="divider">/</span></li>
+    <li><a href="/usuarios/">Usuarios</a> <span class="divider">/</span></li>
+    <li class="active">Editando usuario {{usuario.username|capfirst}}</li>
+  </ul>
+  
+<div class="span8">
+  <legend class="header">Editar nuevo usuario</legend>
+  <form action="" id="formulario" class="form-horizontal" method="POST">
+      {% csrf_token %}
+      <div class="control-group">
+        <label class="control-label" for="id_username">Usernamkkke</label>
+        <div class="controls">
+          {{ formulario.username }}
+          <span class="help-inline"></span>
+          {{ formulario.username.errors }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_first_name">Nombres</label>
+        <div class="controls">
+          {{ formulario.first_name }}
+          <span class="help-inline"></span>
+          {{ formulario.first_name.errors }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_last_name">Apellidos</label>
+        <div class="controls">
+          {{ formulario.last_name }}
+          <span class="help-inline"></span>
+          {{ formulario.last_name.errors }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_email">Email</label>
+        <div class="controls">
+          {{ formulario.email }}
+          <span class="help-inline"></span>
+          {{ formulario.email.errors }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_is_active">Activo</label>
+        <div class="controls">
+          {{ formulario.is_active }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_direccion">Direccion</label>
+        <div class="controls">
+          {{ formulario.direccion }}
+          <span class="help-inline"></span>
+          {{ formulario.direccion.errors }}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_telefono">Telefono</label>
+        <div class="controls">
+          {{ formulario.telefono }}
+          <span class="help-inline"></span>
+          {{ formulario.telefono.errors }}
+        </div>
+      </div>
+      <input type="hidden" value="{{usuario.username}}" id="username-validar">
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-medium" id="boton-registrar">Actualizar</button>
+        <button type="reset" class="btn btn-primary btn-medium">Cancelar</button>
+      </div>
+    </form>
+</div>
+<div class="span4">
+  <h3>Informacion</h3>
+  <p>
+    En este apartado puedes modificar un usuario.
+  </p>
+</div>
+</div>
+
+{% endblock contenido %}
+
+{% block script %}
+
+{% endblock script %}

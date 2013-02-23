@@ -13,11 +13,10 @@ TIPO_PUESTO = (
 )
 
 User.add_to_class('telefono', models.IntegerField(null=True,blank=True, max_length=7))
-User.add_to_class('dni', models.IntegerField(null=True,blank=True, max_length=8))
 User.add_to_class('direccion', models.CharField(null=True,blank=True, max_length=500))
 User.add_to_class('genero', models.CharField(null=True,blank=True, choices=GENERO, max_length=30))
-User.add_to_class('puesto', models.CharField(null=True,blank=True, max_length=500))
-User.add_to_class('sueldo', models.FloatField(null=True,blank=True, choices=TIPO_PUESTO, max_length=100 ))
+User.add_to_class('puesto', models.CharField(null=True,blank=True,choices=TIPO_PUESTO, max_length=500))
+User.add_to_class('sueldo', models.FloatField(null=True,blank=True, max_length=100 ))
 
 class Control(models.Model):
 	fecha_ingreso = models.DateField(auto_now=True)
@@ -30,10 +29,8 @@ class Control(models.Model):
 class Turno(models.Model):
 	nombre = models.CharField(max_length=100)
 	hora_turno = models.TimeField()
-
 	def __unicode__(self):
 		return self.nombre
-
 
 class UsuarioTurno(models.Model):
 	fecha_inicio = models.DateField()

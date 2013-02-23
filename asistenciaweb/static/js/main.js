@@ -95,7 +95,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 } );
 
 /* Table initialisation */
-$(document).ready(function() {
+/*$(document).ready(function() {
     $('#example').dataTable( {
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6 center'p>>",
         "sPaginationType": "bootstrap",
@@ -117,3 +117,4 @@ $(document).ready(function() {
     } );
 
 } );
+*/
