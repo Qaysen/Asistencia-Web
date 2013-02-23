@@ -98,14 +98,14 @@ sub {
   bottom: -0.25em;
 }
 
-img {
+/*img {
   width: auto\9;
   height: auto;
   max-width: 100%;
   vertical-align: middle;
   border: 0;
   -ms-interpolation-mode: bicubic;
-}
+}*/
 
 #map_canvas img,
 .google-maps img {
@@ -200,10 +200,10 @@ textarea {
     display: table-header-group;
   }
   tr,
-  img {
+  imga {
     page-break-inside: avoid;
   }
-  img {
+  imga {
     max-width: 100% !important;
   }
   @page  {

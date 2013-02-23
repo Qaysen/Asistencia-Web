@@ -20,8 +20,8 @@ User.add_to_class('puesto', models.CharField(null=True,blank=True, max_length=50
 User.add_to_class('sueldo', models.FloatField(null=True,blank=True, choices=TIPO_PUESTO, max_length=100 ))
 
 class Control(models.Model):
-	fecha_ingreso = models.DateTimeField(auto_now=True)
-	fecha_salida = models.DateTimeField(auto_now=True)
+	fecha_ingreso = models.DateField(auto_now=True)
+	fecha_salida = models.DateField(auto_now=True)
 	usuario = models.ForeignKey(User)
 
 	def __unicode__(self):
@@ -46,7 +46,7 @@ class UsuarioTurno(models.Model):
 
 class Descuento(models.Model):
 	magnitud = models.CharField(max_length=100)
-	porcentaje = models.FloatField()
+	porcentaje = models.DecimalField(decimal_places=2, max_digits=12)
 	fecha_inicio = models.DateField()
 	fecha_termino = models.DateField()
 
