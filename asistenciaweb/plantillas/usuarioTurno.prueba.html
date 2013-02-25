@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Usuario Turno{%  endblock %}
+{% block encabezado %}
+	<h2><strong> Usuario Turno</strong></h1>
+{% endblock %}
+
+{% block contenido %}
+
+<ul class="breadcrumb">
+  <li><a href="/">Asistencia Web</a> <span class="divider">/</span></li>
+  <li class="active">Usuario- Turno </li>
+</ul>
+  <div class="box-header" data-original-title>
+    <h2><i class="icon-user"></i><span class="break"></span>Usuario Turno</h2>
+    <div class="box-icon">
+      <span class="break"></span>
+      <i class="icon-plus-sign" ></i><span class="break"></span>
+      <a id="nuevo" >Nuevo</a>  
+    </div>
+  </div>
+<div class="box-content">
+    <table class="table table-striped table-bordered" id="example">
+              <thead>
+                <tr>                  
+                  <th>Usuario</th>
+                  <th>Turno</th>
+                  <th>Fecha de inicio</th>
+                  <th>Fecha de termino</th>                 
+                  <th>Acciones</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>   
+              <tbody>
+                <tr> </tr>
+                {% for dato in usuarioTurno %}
+                <tr>                  
+                  <td>
+                    <a class="usuario editable-click" data-type="select" data-pk="{{dato.id}}" data-url="/edit_usuario/" >{{dato.usuario}}</a></td>
+                  <td>{{dato.turno}}</td> 
+                  <td>
+                    <input type="hidden" class="fechaTer" value="{{dato.fecha_termino|date:"Ymd" }}"/>
+                    <a href="#" class="fecha_inicio editable-click" data-type="date" data-pk="{{dato.id}}" data-url="/edit_fechas/" data-name="fecha_inicio">{{dato.fecha_inicio}}</a>
+                  <span class="help-inline"></span>
+                  </td>                  
+                  <td>
+                    <input type="hidden" class="fechaIni" value="{{dato.fecha_inicio|date:"Ymd" }}"/>
+                    <a href="#" class="fecha_termino editable-click" data-type="date" data-pk="{{dato.id}}" data-url="/edit_fechas/" data-name="fecha_termino">{{dato.fecha_termino}}</a>
+                  <span class="help-inline"></span></td>
+                  <td class="center">
+                    <a>Guardar</a>
+                  </td>
+                  <td>                   
+                    <input type="hidden" class="idUT" value="{{dato.id}}"/>
+                    <a class="eliminar">Eliminar</a>                  
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>                  
+</div>
+
+
+{% endblock%}
+
+{% block script %}
+<script>
+$.fn.editable.defaults.mode = 'inline';
+$(document).on("ready", inicio);
+function inicio()
+{
+     $('.usuario').editable({   
+      source: 
+      [     
+        {value: '1', text: 'Operario'},
+        {value: '2', text: 'Supervisor'},
+        {value: '3', text: 'Administrador'}
+      ]
+  });
+  $('.fecha_inicio').editable({
+      format: 'yyyy-mm-dd',
+      viewformat: 'dd-mm-yyyy',      
+      validate: function(value)
+       {   
+       var day=value.getDate()+1;
+       var mes=value.getMonth()+1;
+       var anio=value.getFullYear();
+       if (day<10) day="0"+day;
+       if(mes<10) mes="0"+mes;
+       var fecha_inicio=anio+mes+day;              
+       var fecha_termino=$(this).parent().children('.fechaTer').val();
+          if(fecha_inicio>fecha_termino) 
+          {        
+          return 'No es posible!';        
+          }
+      }    
+  });
+  $('.fecha_termino').editable({
+      format: 'yyyy-mm-dd',
+      viewformat: 'dd-mm-yyyy',
+      validate: function(value)
+       {
+       var day=value.getDate()+1;
+       var mes=value.getMonth()+1;
+       var anio=value.getFullYear();
+       if (day<10) day="0"+day;
+       if(mes<10) mes="0"+mes;
+       var fecha_termino=anio+mes+day;
+       var fecha_inicio=$(this).parent().children('.fechaIni').val();
+
+          if(fecha_termino<fecha_inicio) 
+          {        
+         return 'No es posible!';                  
+        }
+      }        
+  });
+ $("#nuevo").on("click",mostrarForm);
+ $(".eliminar").on("click",eliminarUT);
+}
+function mostrarForm()
+{
+  html='<tr id="nuevoUT">';
+  html+='<form id="agregarUT">';
+  html+="{% csrf_token %}";
+  html+='<td><select name="usuario" id="id_usuario">{% for elemento in usuarios %} <option value="{{elemento.id}}">{{elemento.username}}</option>{% endfor %}</select></td>';
+  html+='<td><select name="turno" id="id_turno">{% for elemento in turnos %}<option value="{{elemento.id}}">{{elemento.nombre}}</option>{% endfor %}</select></td>';
+  html+='<td><input type="text" id="id_fecha_inicio" name="fecha_inicio" class="dp2" data-date-format="dd/mm/yyyy"/></td>';
+  html+='<td><input type="text" id="id_fecha_termino" name="fecha_termino" class="dp2" data-date-format="dd/mm/yyyy"/></td>';
+  html+='<td><a id="enviar">Guardar</a></td>';
+  html+='<td>Eliminar</td>';
+  html+='</form>';
+  html+='</tr>';
+  if($("#nuevoUT").length)
+  {
+    alert("Guarde primero");
+  }
+  else
+  {
+  $('tbody tr').first().after(html);
+  }
+  $("#enviar").on("click",agregarUT);
+  $('.dp2').datepicker();
+}
+
+function operacion(data)
+{
+   $('#nuevoUT').html("<td>"+data.usuario+"</td><td>"+data.turno+"</td><td>"+data.fecha_inicio+"</td><td>"+data.fecha_termino+"</td><td>Editar</td><td><input type='hidden' value='"+data.pk+"'><a class='eliminar'>Eliminar</a></td>");
+   $('#nuevoUT').removeAttr("id");
+   $('.eliminar').on('click',eliminarUT);
+}
+function fallo(data)
+{
+  console.log(data);
+}
+function agregarUT()
+{
+  $.ajax(
+      {
+        url:'/ajax/agregarUT/',
+        data:$('#agregarUT').serialize(),
+        type:'POST',
+        success:operacion,
+        error:fallo
+      });
+}
+function eliminarUT()
+{
+var $this=$(this);
+var info=$(this).parent().children('input').val();
+$.ajax({
+  url:'/ajax/eliminarUT/',
+  data:{'pk':info},
+  type:'POST',
+  success:function(data)
+  {
+    $this.parent().parent().hide('slow');
+  }
+});
+}
+</script>
+
+
+{% endblock %}

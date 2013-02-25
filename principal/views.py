@@ -9,7 +9,6 @@ from django.core import serializers
 import random
 from principal.forms import AturnoForm 
 from principal.forms import RegistrarUsuarioForm,EditarUserFormAdm
-from principal.forms import UsuarioTurnoForm
 
 def descuentos(request):
 	descuentos = Descuento.objects.all()
@@ -216,7 +215,7 @@ def editar_usuario(request, id_usuario):
 	return render_to_response('editar-usuario.html', {'formulario':formulario, 'usuario':usuario}, context_instance=RequestContext(request))
 
 
-def usuarioTurno(request):
+'''def usuarioTurno(request):
 	usuarioTurno = UsuarioTurno.objects.all()
 	usuarios=User.objects.all()
 	turnos=Turno.objects.all()
@@ -269,4 +268,4 @@ def agregarUT(request):
 def ver_usuarios(request):	
     usuarios = User.objects.filter(**qdct_as_kwargs(request.POST)).order_by('id') 
     #return JSONResponse with id and name
-    return JSONResponse(usuarios.values('id','username'))
+    return JSONResponse(usuarios.values('id','username'))'''

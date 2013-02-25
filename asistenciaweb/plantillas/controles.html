@@ -19,7 +19,6 @@
         <tr>
           <th>Nombre</th>
           <th>Fecha Inicio</th>
-          <th>Fecha Termino</th>
         </tr>
       </thead>   
       <tbody>
@@ -28,7 +27,6 @@
         <tr>
           <td>{{control.usuario}}</td>
           <td>{{control.fecha_ingreso}}</td>
-          <td>{{control.fecha_salida}}</td>
           <td><a class="edit" href="">Editar</a></td>
           <td>
           	<input type="hidden" value="{{control.id}}">
@@ -96,7 +94,6 @@ function mostrarForm()
     html +=      	"{% csrf_token %}";
     html +=          '<td><select name="usuario" id="id_usuario"><option value="" selected="selected">---------</option><option value="1">edwinpgm</option><option value="2">michael</option></select></td>';
     html +=          '<td><input class="dp2" data-date-format="dd/mm/yy" type="text" id="fecha_ingreso" name="fecha_ingreso"></td>';
-    html +=          '<td><input class="dp2" data-date-format="dd/mm/yy" type="text" id="fecha_salida" name="fecha_salida"></td>';
     html +=          '<td><a id="enviar">Guardar</a></td>';
     html +=          '<td><a>Eliminar</a></td>';
     html +=      '</form>';

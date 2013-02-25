@@ -18,9 +18,9 @@ class AturnoForm(ModelForm):
     class Meta:
     	model= Turno
 
-class UsuarioTurnoForm(ModelForm):
+'''class UsuarioTurnoForm(ModelForm):
     class Meta:
-        model=UsuarioTurno
+        model=UsuarioTurno'''
 
 class RegistrarUsuarioForm(ModelForm):
     username=forms.CharField(label="DNI" , max_length=8)
@@ -36,7 +36,3 @@ class EditarUserFormAdm(ModelForm):
     class Meta:
         model = User
         exclude = ("is_staff","is_superuser","last_login", "groups", "user_permissions", "date_joined", 'password', 'password1', 'password2')
-
-class UsuarioTurnoForm(ModelForm):
-    class Meta:
-        model=UsuarioTurno
