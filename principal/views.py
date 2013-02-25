@@ -155,6 +155,8 @@ def registrar_usuario(request):
 	if request.method=='POST':
 		usuario = request.POST.copy()
 		usuario['password']=usuario['username']
+		turno=Turno.objects.get(nombre=usuario['turno'])
+		usuario['turno']=turno.id
 		formulario=RegistrarUsuarioForm(usuario)
 		#Hay diferencia entre is_valid() y is_valid, mientras que el primero valida mostrando los errores el ultimo no muestra los errores.
 		if formulario.is_valid():
@@ -171,7 +173,7 @@ def ajax_ver_usuario(request):
 	if request.is_ajax():
 		clave=request.GET['id_usuario']
 		usuario = User.objects.get(pk=clave) 
-		data=json.dumps({'nombre':usuario.first_name,'apellido':usuario.last_name, 'email':usuario.email,'user':usuario.username,'direccion':usuario.direccion,'telefono':usuario.telefono})
+		data=json.dumps({'nombre':usuario.first_name,'apellido':usuario.last_name, 'email':usuario.email,'user':usuario.username,'direccion':usuario.direccion,'telefono':usuario.telefono,'nombret':usuario.turno.nombre,'horat':str(usuario.turno.hora_turno)})
 		
 		return HttpResponse(data, mimetype="application/json")
 	else:

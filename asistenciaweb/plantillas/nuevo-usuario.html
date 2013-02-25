@@ -75,7 +75,7 @@
 	    </div>
 
 	    <div class="control-group">
-		    <label class="control-label" for="id_telefono">Sueldo</label>
+		    <label class="control-label" for="id_sueldo">Sueldo</label>
 		    <div class="controls">
 		    	<input type="number" name="sueldo" id="id_sueldo" step="0.01" min="0" maxlength="500" class="input-xlarge" placeholder="Sueldo" title="Numero necesario" />
 		    	<span class="help-inline"></span>
@@ -84,13 +84,22 @@
 	    </div>
 
 	    <div class="control-group">
-		    <label class="control-label" for="id_telefono">Puesto</label>
+		    <label class="control-label" for="id_puesto">Puesto</label>
 		    <div class="controls">
-		    	<input type="number" name="puesto" id="id_puesto" maxlength="500" class="input-xlarge" placeholder="Puesto" title="Numero necesario" />
+		    	<input type="text" name="puesto" id="id_puesto" maxlength="500" class="input-xlarge" placeholder="Puesto" title="Numero necesario" />
 		    	<span class="help-inline"></span>
 		    	{{ formulario.puesto.errors }}
 		    </div>
 	    </div>
+	    <div class="control-group">
+		    <label class="control-label" for="id_turno">Turno</label>
+		    <div class="controls">
+		    	<input type="text" name="turno" id="id_turno" maxlength="500" class="input-xlarge" placeholder="Turno" title="Se necesita el turno" />
+		    	<span class="help-inline"></span>
+		    	{{ formulario.turno.errors }}
+		    </div>
+	    </div>
+
 	    <div class="form-actions">
 		    <button type="submit" class="btn btn-primary btn-medium" id="boton-registrar">Registrar</button>
 		    <button type="reset" class="btn btn-primary btn-medium">Cancelar</button>
