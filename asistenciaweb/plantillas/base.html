@@ -54,11 +54,13 @@
                                 </ul>
                             </li>
                         </ul>
-                        <form class="navbar-form pull-right">
-                            <input class="span2" type="text" placeholder="Email">
-                            <input class="span2" type="password" placeholder="Password">
-                            <button type="submit" class="btn">Sign in</button>
-                        </form>
+                        {% if user.is_authenticated %}
+                        <ul class="nav pull-right">
+                            <li><a href="/">{{user.first_name|capfirst}}</a></li>
+                            <li><a href="/cerrar/">Cerrar Session</a></li>
+                        </ul>
+                        {% else %}
+                        {% endif %}
                     </div><!--/.nav-collapse -->
                 </div>
             </div>

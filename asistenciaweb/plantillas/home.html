@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+	Sisgedo
+{% endblock titulo %}
+
+{% block contenido %}
+<div class="row">
+	<div class="span8">
+		<div id="myCarousel" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="item">
+                <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
+                <div class="carousel-caption">
+                  <h4>First Thumbnail label</h4>
+                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                </div>
+              </div>
+              <div class="item active">
+                <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
+                <div class="carousel-caption">
+                  <h4>Second Thumbnail label</h4>
+                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                </div>
+              </div>
+              <div class="item">
+                <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-03.jpg" alt="">
+                <div class="carousel-caption">
+                  <h4>Third Thumbnail label</h4>
+                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                </div>
+              </div>
+            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+          </div>
+	</div>
+
+	<div class="span4">
+		{% if user.is_authenticated %}
+    <legend><p class="tit1">Elige tu perfil :</p></legend>
+			{% for perfil in perfiles %}
+				{% if perfil.estado == 1 %}
+				<div>
+					<button value="{{perfil.id}}" class="btn btn-info">{{perfil.tipo}}</button>
+				</div><br>
+				{% endif %}
+			{% endfor %}
+		{% else %}
+		<div class="ingresar">  
+			<form action="" id="formulario-login" class="form-horizontal" method="POST">
+				{% csrf_token %}
+				
+					<legend><p class="tit1">Ingresar</p></legend>
+				<!--{{formulario}} -->
+					<div class="control-group">
+			            <div class="input-prepend">
+							<span class="add-on"><i class="icon-user"></i></span>
+							<input class="span2" type="text" name="username" value="" id="username" placeholder="Usuario">
+			              </div>
+			        </div>
+			        <div class="control-group">
+			             <div class="input-prepend">
+			              <span class="add-on"><i class="icon-lock"></i></span>
+			             <input class="span2" type="password" name="password" value="" id="password" placeholder="Contraseña">
+			            </div>
+			        </div>
+
+					<div class="control-group">
+					    <button type="submit" class="btn btn-primary btn-medium">Ingresar</button>		
+				    </div>
+					<!--<input type="submit" class="btn btn-primary btn-medium" value="Ingresar">-->
+			</form>
+		</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock contenido %}
+
+{% block script %}
+<script>
+
+$(document).on("ready", inicio);
+$(document).on("ready", setup);
+  function setup(){
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        function getCookie(name) {
+          var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+              var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                    }
+                }
+            }
+        return cookieValue;
+        }
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+      // Only send the token to relative URLs i.e. locally.
+          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+      }
+    });
+  }
+
+function inicio()
+{
+  $( "button" ).on( "click", evento);
+}
+function evento()
+{
+    var $checkbox1 = $(this);
+    var id_perfil = $(this).val();
+      $.ajax({
+        data:{"id_perfil":id_perfil},
+        type:"post",
+        url:'/ajax/cambiar-online/',
+        success: function (data)
+        {
+            $("#online a").html(data);
+        }
+      });
+    console.log(id_perfil);
+}
+
+</script>
+{% endblock script %}
