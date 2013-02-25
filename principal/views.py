@@ -12,6 +12,7 @@ from principal.forms import RegistrarUsuarioForm,EditarUserFormAdm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+import datetime
 
 def home(request):
 	if request.method == 'POST':
@@ -127,7 +128,10 @@ def registrar_controles(request):
 			cantidad_de_usuarios = len(usuarios)
 			n = random.randint(1,cantidad_de_usuarios)
 			control = Control.objects.latest("id")
-			Control.objects.filter(pk=control.id).update(usuario=n)
+			print datetime.date.today()
+			while Control.objects.filter(usuario = n, fecha_ingreso=datetime.date.today()):
+				n = random.randint(1,cantidad_de_usuarios)
+			Control.objects.filter(pk=control.id).update(usuario=n, fecha_ingreso=datetime.datetime.now())
 			return HttpResponseRedirect('/registrar-controles/')
 	else:
 		formulario = ControlForm()
