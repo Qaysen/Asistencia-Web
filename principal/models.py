@@ -21,7 +21,8 @@ User.add_to_class('sueldo', models.FloatField(null=True,blank=True, max_length=1
 User.add_to_class('turno', models.ForeignKey(Turno, null=True, blank=True))
 
 class Control(models.Model):
-	fecha_ingreso = models.DateTimeField(auto_now=True)
+	fecha_ingreso = models.DateField(auto_now=True)
+	hora_ingreso = models.TimeField(auto_now=True)
 	usuario = models.ForeignKey(User)
 
 	def __unicode__(self):
