@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+  Graficos de descuentos
+{% endblock titulo %}
+
+{% block contenido %}
+  <div id="chart_div" style="width: 900px; height: 500px;"></div>
+{% endblock contenido %}
+
+{% block script %}
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() 
+      {
+        var data = google.visualization.arrayToDataTable([
+          ['Mes', 'Numero Incidencias'],
+
+          {% for key, value in cantXMes.iteritems %}
+          ['{{key}}', {{value}}],
+           
+
+          {% endfor %}
+          
+        ]);
+
+        var options = {
+          title: 'Numero de Incidencias',
+          hAxis: {title: 'Meses', titleTextStyle: {color: 'red'}}
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock script %}

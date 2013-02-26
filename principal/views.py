@@ -13,6 +13,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 import datetime
+from django.db.models import Count
+from django.utils.datastructures import SortedDict
 
 def home(request):
 	if request.method == 'POST':
@@ -47,6 +49,30 @@ def descuentos(request):
 def graficos_descuentos(request):
 	descuentos = Descuento.objects.all()
 	return render_to_response('graficos-descuentos.html', {'descuentos':descuentos}, context_instance=RequestContext(request))
+
+def graficos_incidencias(request, id_usuario):
+	control = Control.objects.filter(usuario= id_usuario)	
+	meses =['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto']
+	cantidades=[]
+
+	for i in range(1, 8):
+		cantidades.append([])
+		cantidades[i-1]=contarXMes(i)
+	
+	cantXMes=SortedDict(dict(zip(meses,cantidades)))
+	
+
+	return render_to_response('graficos-incidencias.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
+
+def contarXMes(n): 
+
+	resultado_mes= ""      
+	#control = Control.objects.filter(usuario_id = id_usuario)
+	
+	#hobbies = Control.objects.annotate(=Count('personas_count'))
+	resultados_mes = Control.objects.filter(fecha_ingreso.getMont=n)  # Enero	
+				
+	return resultado_mes
 
 def agregar_descuento(request):
 	dato = "hola"
