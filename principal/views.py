@@ -13,6 +13,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 import datetime
+
 from django.db.models import Count
 
 
@@ -86,7 +87,8 @@ def reporte_incidencias(request, id_usuario):
 	turno=Turno.objects.get(pk=usuario.turno_id)	
 	meses =['Enero','Febrero']
 	cantidades=[]
-	dif_hora=[]
+	dif_minutos_Enero=[]
+	dif_minutos_Febrero=[]
 	horaTurno=turno.hora_turno
 
 	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000')
@@ -95,8 +97,7 @@ def reporte_incidencias(request, id_usuario):
 	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
 	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-03').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
 	
-	print control_Enero_tard
-
+	
 	cantidades.append([])
 	cantidades[0]=control_Enero_faltas.count()+control_Enero_tard.count()
 	cantidades.append([])
@@ -106,17 +107,37 @@ def reporte_incidencias(request, id_usuario):
 
 	descuento=Descuento.objects.get(pk=1)
 
-
-
+	j=0
 
 	for i in control_Enero_tard:
-		#dif_hora.append([])
-		#diferencia=i.hora_ingreso-horaTurno
-		print i.hora_ingreso
-		print horaTurno
-		dif=i.hora_ingreso-horaTurno
-		print dif.strftime('%H:%M:%S')
-	return render_to_response('reporte-incidencias.html',{'cantXMes':cantXMes,'CEF':control_Enero_faltas,'CET':control_Enero_tard,'CFF':control_Febrero_faltas,'CFT':control_Febrero_tard}, context_instance=RequestContext(request))
+
+		hora_ingreso=i.hora_ingreso.hour
+		min_ingreso=i.hora_ingreso.minute
+		hora_horaTurno=horaTurno.hour
+		min_horaTurno=horaTurno.minute
+
+		dif_hora=hora_ingreso-hora_horaTurno
+		dif_min=min_ingreso-min_horaTurno
+		minutos=dif_hora*60 + dif_min
+		dif_minutos_Enero.append([])
+		dif_minutos_Enero[j]=minutos
+		j=j+1
+	j=0
+
+	for i in control_Febrero_tard:
+		hora_ingreso=i.hora_ingreso.hour
+		min_ingreso=i.hora_ingreso.minute
+		hora_horaTurno=horaTurno.hour
+		min_horaTurno=horaTurno.minute
+
+		dif_hora=hora_ingreso-hora_horaTurno
+		dif_min=min_ingreso-min_horaTurno
+		minutos=dif_hora*60 + dif_min
+		dif_minutos_Febrero.append([])
+		dif_minutos_Febrero[j]=minutos
+		j=j+1
+
+	return render_to_response('reporte-incidencias.html',{'cantXMes':cantXMes,'CEF':control_Enero_faltas,'CET':control_Enero_tard,'CFF':control_Febrero_faltas,'CFT':control_Febrero_tard,'DME':dif_minutos_Enero,'DMF':dif_minutos_Febrero}, context_instance=RequestContext(request))
 
 def agregar_descuento(request):
 	dato = "hola"

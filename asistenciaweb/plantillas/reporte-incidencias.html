@@ -5,34 +5,34 @@
 {% endblock titulo %}
 
 {% block contenido %}
-  <div id="chart_div" style="width: 100%; height: 500px;"></div>
+  
+  <h2>2013-02</h2>
+    <h3>Tardanzas: </h3>
+      <div class="box-content">
+          <table class="table table-striped table-bordered" id="example">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora de Ingreso</th>
+                <th>Minutos</th>
+                <th>Descuento</th>
+              </tr>
+            </thead>   
+            <tbody>
+              {% for tardanza, value in CET , DME %}
+              <tr>
+                <td>{{tardanza.fecha_ingreso}}</td> 
+                <td>{{tardanza.hora_ingreso}}</td>
+                <td>{{value}}</td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div> 
+
+
+
+
 {% endblock contenido %}
 
-{% block script %}
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() 
-      {
-        var data = google.visualization.arrayToDataTable([
-          ['Mes', 'Numero Incidencias'],
-
-          {% for key, value in cantXMes.iteritems %}
-          ['{{key}}', {{value}}],
-           
-
-          {% endfor %}
-          
-        ]);
-
-        var options = {
-          title: 'Numero de Incidencias',
-          hAxis: {title: 'Meses', titleTextStyle: {color: 'red'}}
-        };
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>
-{% endblock script %}
