@@ -85,8 +85,8 @@ def reporte_incidencias(request, id_usuario):
 	control = Control.objects.filter(usuario= id_usuario)
 	usuario=User.objects.get(pk=id_usuario)
 	turno=Turno.objects.get(pk=usuario.turno_id)	
-	meses =['Enero','Febrero']
-	cantidades=[]
+
+
 	dif_minutos_Enero=[]
 	dif_minutos_Febrero=[]
 	horaTurno=turno.hora_turno
@@ -98,15 +98,16 @@ def reporte_incidencias(request, id_usuario):
 	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-03').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
 	
 	
-	cantidades.append([])
-	cantidades[0]=control_Enero_faltas.count()+control_Enero_tard.count()
-	cantidades.append([])
-	cantidades[1]=control_Febrero_faltas.count()+control_Febrero_tard.count()		
-	
-	cantXMes=dict(zip(meses,cantidades))	
+	cantXE_T=control_Enero_tard.count()
+	cantXF_T=control_Febrero_tard.count()
+	cantXE_F=control_Enero_faltas.count()
+	cantXF_F=control_Febrero_faltas.count()
 
 	descuento=Descuento.objects.get(pk=1)
 
+	minutosTotales=control_Enero_faltas.count()*8*60
+
+	
 	j=0
 
 	for i in control_Enero_tard:
@@ -121,8 +122,14 @@ def reporte_incidencias(request, id_usuario):
 		minutos=dif_hora*60 + dif_min
 		dif_minutos_Enero.append([])
 		dif_minutos_Enero[j]=minutos
+		minutosTotales+=minutos
+
 		j=j+1
 	j=0
+
+	descuento_E=descuento.porcentaje*minutosTotales*int(usuario.sueldo)/100
+	sueldo_Real_E=int(usuario.sueldo)-descuento_E
+	print sueldo_Real_E
 
 	for i in control_Febrero_tard:
 		hora_ingreso=i.hora_ingreso.hour
@@ -137,7 +144,11 @@ def reporte_incidencias(request, id_usuario):
 		dif_minutos_Febrero[j]=minutos
 		j=j+1
 
-	return render_to_response('reporte-incidencias.html',{'cantXMes':cantXMes,'CEF':control_Enero_faltas,'CET':control_Enero_tard,'CFF':control_Febrero_faltas,'CFT':control_Febrero_tard,'DME':dif_minutos_Enero,'DMF':dif_minutos_Febrero}, context_instance=RequestContext(request))
+	control_dif_E=dict(zip(dif_minutos_Enero,control_Enero_tard))
+
+	
+
+	return render_to_response('reporte-incidencias.html',{'sueldo_Real_E':sueldo_Real_E,'cantXE_T':cantXE_T,'minutosTotales':minutosTotales,'descuento_E':descuento_E,'usuario':usuario,'CEF':control_Enero_faltas,'CFF':control_Febrero_faltas,'CFT':control_Febrero_tard,'control_dif_E':control_dif_E,'DMF':dif_minutos_Febrero,'descuento':descuento}, context_instance=RequestContext(request))
 
 def agregar_descuento(request):
 	dato = "hola"
