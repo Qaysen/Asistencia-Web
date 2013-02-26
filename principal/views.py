@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 import datetime
 from django.db.models import Count
-from django.utils.datastructures import SortedDict
+
 
 def home(request):
 	if request.method == 'POST':
@@ -79,6 +79,44 @@ def graficos_incidencias(request, id_usuario):
 
 	return render_to_response('graficos-incidencias.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
 
+
+def reporte_incidencias(request, id_usuario):
+	control = Control.objects.filter(usuario= id_usuario)
+	usuario=User.objects.get(pk=id_usuario)
+	turno=Turno.objects.get(pk=usuario.turno_id)	
+	meses =['Enero','Febrero']
+	cantidades=[]
+	dif_hora=[]
+	horaTurno=turno.hora_turno
+
+	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000')
+	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-03', hora_ingreso__startswith='00:00:00.000000')
+	
+	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
+	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-03').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
+	
+	print control_Enero_tard
+
+	cantidades.append([])
+	cantidades[0]=control_Enero_faltas.count()+control_Enero_tard.count()
+	cantidades.append([])
+	cantidades[1]=control_Febrero_faltas.count()+control_Febrero_tard.count()		
+	
+	cantXMes=dict(zip(meses,cantidades))	
+
+	descuento=Descuento.objects.get(pk=1)
+
+
+
+
+	for i in control_Enero_tard:
+		#dif_hora.append([])
+		#diferencia=i.hora_ingreso-horaTurno
+		print i.hora_ingreso
+		print horaTurno
+		dif=i.hora_ingreso-horaTurno
+		print dif.strftime('%H:%M:%S')
+	return render_to_response('reporte-incidencias.html',{'cantXMes':cantXMes,'CEF':control_Enero_faltas,'CET':control_Enero_tard,'CFF':control_Febrero_faltas,'CFT':control_Febrero_tard}, context_instance=RequestContext(request))
 
 def agregar_descuento(request):
 	dato = "hola"
@@ -220,6 +258,8 @@ def registrar_usuario(request):
 	if request.method=='POST':
 		usuario = request.POST.copy()
 		usuario['password']=usuario['username']
+		turno=Turno.objects.get(nombre=usuario['turno'])
+		usuario['turno']=turno.id
 		formulario=RegistrarUsuarioForm(usuario)
 		#Hay diferencia entre is_valid() y is_valid, mientras que el primero valida mostrando los errores el ultimo no muestra los errores.
 		if formulario.is_valid():
@@ -236,7 +276,7 @@ def ajax_ver_usuario(request):
 	if request.is_ajax():
 		clave=request.GET['id_usuario']
 		usuario = User.objects.get(pk=clave) 
-		data=json.dumps({'nombre':usuario.first_name,'apellido':usuario.last_name, 'email':usuario.email,'user':usuario.username,'direccion':usuario.direccion,'telefono':usuario.telefono})
+		data=json.dumps({'nombre':usuario.first_name,'apellido':usuario.last_name, 'email':usuario.email,'user':usuario.username,'direccion':usuario.direccion,'telefono':usuario.telefono,'nombret':usuario.turno.nombre,'horat':str(usuario.turno.hora_turno)})
 		
 		return HttpResponse(data, mimetype="application/json")
 	else:

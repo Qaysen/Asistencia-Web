@@ -47,7 +47,7 @@ Usuarios
 
           </td>
 
-          <td class="center" style="width:180px; text-align:center;">
+          <td class="center" style="width:250px; text-align:center;">
             <button class="btn btn-success mostrar" value="{{usuario.id}}" >
             
             <i class="icon-zoom-in icon-white"></i>
@@ -61,10 +61,14 @@ Usuarios
               <i class="icon-user icon-white"></i>
             </a>
 -->
-            <button class="btn btn-warning cambiar" value="{{usuario.id}}"><i class="icon-white icon-refresh"></i></button>
+            <button class="btn btn-danger cambiar" value="{{usuario.id}}"><i class="icon-white icon-refresh"></i></button>
 
              <a class="btn btn-warning " href="/usuarios/graficar/{{usuario.id}}">
               <i class="icon-signal icon-white"></i>
+            </a>
+
+            <a class="btn btn-warning " href="/usuarios/reporte/{{usuario.id}}">
+              <i class="icon-list-alt icon-white"></i>
             </a>
             
             <!--<a class="btn btn-warning"><i class="icon-white icon-refresh"></i></a>-->
@@ -115,7 +119,7 @@ function evento()
     success:function(data)
     {  
     $("#myModalLabel").html('<div>Datos de Usuario</div>');  
-    $(".modal-body").html('<div>Usuario:   '+data.user+'</div><div>Nombre:   '+data.nombre+'</div><div>Apellido:   '+data.apellido+'</div><div>Email:   '+data.email+'</div><div>Direccion:   '+data.direccion+'</div><div>Telefono:   '+data.telefono+'</div>');
+    $(".modal-body").html('<div>Usuario:   '+data.user+'</div><div>Nombre:   '+data.nombre+'</div><div>Apellido:   '+data.apellido+'</div><div>Email:   '+data.email+'</div><div>Direccion:   '+data.direccion+'</div><div>Telefono:   '+data.telefono+'</div><div>Turno:   '+data.nombret+'</div><div>Hora:   '+data.horat+'</div>');
    
     }
   }); 

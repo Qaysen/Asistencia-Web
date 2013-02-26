@@ -38,6 +38,7 @@
 
 	<div class="span4">
 		{% if user.is_authenticated %}
+<!--  
     <legend><p class="tit1">Elige tu perfil :</p></legend>
 			{% for perfil in perfiles %}
 				{% if perfil.estado == 1 %}
@@ -46,6 +47,7 @@
 				</div><br>
 				{% endif %}
 			{% endfor %}
+-->
 		{% else %}
 		<div class="ingresar">  
 			<form action="" id="formulario-login" class="form-horizontal" method="POST">
