@@ -57,20 +57,22 @@ def graficos_incidencias(request, id_usuario):
 
 	for i in range(1, 8):
 		cantidades.append([])
-		cantidades[i-1]=contarXMes(i)
+		cantidades[i-1]=contarXMes(i,id_usuario)
 	
 	cantXMes=SortedDict(dict(zip(meses,cantidades)))
 	
 
 	return render_to_response('graficos-incidencias.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
 
-def contarXMes(n): 
+def contarXMes(n, id_usuario): 
 
-	resultado_mes= ""      
-	#control = Control.objects.filter(usuario_id = id_usuario)
+	  
 	
+	print id_usuario
+	control = Control.objects.get(usuario = id_usuario)
 	#hobbies = Control.objects.annotate(=Count('personas_count'))
-	resultados_mes = Control.objects.filter(fecha_ingreso.getMont=n)  # Enero	
+	#result=Control.objects.get(fecha_ingreso=n)  # Enero	
+	resultado_mes = 56  # Enero	
 				
 	return resultado_mes
 
