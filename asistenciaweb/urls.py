@@ -3,6 +3,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',   
+    url(r'^$','principal.views.home'),
+    url(r'^cerrar/$','principal.views.cerrar'),
     url(r'^usuarios/$','principal.views.usuarios'),
     url(r'^usuarios/registrar/$','principal.views.registrar_usuario'),
     url(r'^usuarios/editar/(?P<id_usuario>\d+)$', 'principal.views.editar_usuario'),

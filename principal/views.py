@@ -9,6 +9,35 @@ from django.core import serializers
 import random
 from principal.forms import AturnoForm 
 from principal.forms import RegistrarUsuarioForm,EditarUserFormAdm
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+def home(request):
+	if request.method == 'POST':
+		formulario = AuthenticationForm(request.POST)
+		if formulario.is_valid:
+			usuario = request.POST['username']
+			clave = request.POST['password']
+			acceso = authenticate(username=usuario, password=clave)
+			if acceso is not None:
+				user= User.objects.get(username=usuario)
+				if acceso.is_active:
+					login(request, acceso)
+					user.save()
+					return HttpResponseRedirect('/')
+				else:
+					return render_to_response('noactivo.html', context_instance=RequestContext(request))
+			else:
+				return render_to_response('nousuario.html', context_instance=RequestContext(request))
+	else:
+		formulario = AuthenticationForm()
+	return render_to_response('home.html',{'formulario':formulario}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def cerrar(request):
+	logout(request)
+	return HttpResponseRedirect('/')
 
 def descuentos(request):
 	descuentos = Descuento.objects.all()
