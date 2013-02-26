@@ -12,6 +12,9 @@ from principal.forms import RegistrarUsuarioForm,EditarUserFormAdm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+import datetime
+from django.db.models import Count
+
 
 def home(request):
 	if request.method == 'POST':
@@ -46,6 +49,20 @@ def descuentos(request):
 def graficos_descuentos(request):
 	descuentos = Descuento.objects.all()
 	return render_to_response('graficos-descuentos.html', {'descuentos':descuentos}, context_instance=RequestContext(request))
+
+def graficos_incidencias(request, id_usuario):
+	control = Control.objects.filter(usuario= id_usuario)
+	print control.count()
+	return render_to_response('graficos-incidencias.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
+
+def contarXMes(n, id_usuario): 
+	print id_usuario
+	control = Control.objects.get(usuario = id_usuario)
+	#hobbies = Control.objects.annotate(=Count('personas_count'))
+	#result=Control.objects.get(fecha_ingreso=n)  # Enero	
+	resultado_mes = 56  # Enero	
+				
+	return resultado_mes
 
 def agregar_descuento(request):
 	dato = "hola"
@@ -127,7 +144,10 @@ def registrar_controles(request):
 			cantidad_de_usuarios = len(usuarios)
 			n = random.randint(1,cantidad_de_usuarios)
 			control = Control.objects.latest("id")
-			Control.objects.filter(pk=control.id).update(usuario=n)
+			print datetime.date.today()
+			while Control.objects.filter(usuario = n, fecha_ingreso=datetime.date.today()):
+				n = random.randint(1,cantidad_de_usuarios)
+			Control.objects.filter(pk=control.id).update(usuario=n, fecha_ingreso=datetime.datetime.now())
 			return HttpResponseRedirect('/registrar-controles/')
 	else:
 		formulario = ControlForm()

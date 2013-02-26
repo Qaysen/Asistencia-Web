@@ -35,4 +35,4 @@ class EditarUserFormAdm(ModelForm):
     username= forms.CharField(label="Nombre de usuario")
     class Meta:
         model = User
-        exclude = ("is_staff","is_superuser","last_login", "groups", "user_permissions", "date_joined", 'password', 'password1', 'password2')
+        exclude = ("is_staff","is_superuser","last_login", "groups", "user_permissions", "date_joined", 'password', 'password1', 'password2','puesto','sueldo','turno')
