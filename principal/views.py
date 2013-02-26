@@ -51,30 +51,34 @@ def graficos_descuentos(request):
 	return render_to_response('graficos-descuentos.html', {'descuentos':descuentos}, context_instance=RequestContext(request))
 
 def graficos_incidencias(request, id_usuario):
-	control = Control.objects.filter(usuario= id_usuario)	
-	meses =['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto']
-	cantidades=[]
+	control = Control.objects.filter(usuario= id_usuario)
+	usuario=User.objects.get(pk=id_usuario)
 
-	for i in range(1, 8):
-		cantidades.append([])
-		cantidades[i-1]=contarXMes(i,id_usuario)
+	turno=Turno.objects.get(pk=usuario.turno_id)
 	
-	cantXMes=SortedDict(dict(zip(meses,cantidades)))
+	meses =['Enero','Febrero']
+	cantidades=[]
+	horaTurno=turno.hora_turno
+	print horaTurno
+
+	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000').count()
+	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-03', hora_ingreso__startswith='00:00:00.000000').count()
+	
+	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
+	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-03').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
+	
+	print control_Enero_tard
+
+	cantidades.append([])
+	cantidades[0]=control_Enero_faltas+control_Enero_tard
+	cantidades.append([])
+	cantidades[1]=control_Febrero_faltas+control_Febrero_tard		
+	
+	cantXMes=dict(zip(meses,cantidades))
 	
 
 	return render_to_response('graficos-incidencias.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
 
-def contarXMes(n, id_usuario): 
-
-	  
-	
-	print id_usuario
-	control = Control.objects.get(usuario = id_usuario)
-	#hobbies = Control.objects.annotate(=Count('personas_count'))
-	#result=Control.objects.get(fecha_ingreso=n)  # Enero	
-	resultado_mes = 56  # Enero	
-				
-	return resultado_mes
 
 def agregar_descuento(request):
 	dato = "hola"
