@@ -98,12 +98,15 @@ def grafico_general(request):
 	cantidadesT.append([])
 	cantidadesT[1]=control_Febrero_tard		
 	cant=dict(zip(meses,cantidadesT))
+	
 	cantidadesF.append([])
 	cantidadesF[0]=control_Enero_faltas
 	cantidadesF.append([])
 	cantidadesF[1]=control_Febrero_faltas	
-	cantXMes=dict(zip(cant,cantidadesF))
 	
+	cantXMes=dict(zip(cantidadesF,cant))
+	print cant['Enero']
+	print cant['Febrero']
 	print cantXMes
 
 	return render_to_response('grafico_general.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
@@ -178,8 +181,6 @@ def reporte_incidencias(request, id_usuario):
 
 	control_dif_E=dict(zip(dif_minutos_Enero,control_Enero_tard))
 	control_dif_F=dict(zip(dif_minutos_Febrero,control_Febrero_tard))
-
-	
 
 	return render_to_response('reporte-incidencias.html',{'sueldo_Real_E':sueldo_Real_E,'sueldo_Real_F':sueldo_Real_F,'minutosTotalesE':minutosTotalesE,'minutosTotalesF':minutosTotalesF,'descuento_E':descuento_E,'descuento_F':descuento_F,'usuario':usuario,'CEF':control_Enero_faltas,'CFF':control_Febrero_faltas,'control_dif_E':control_dif_E,'control_dif_F':control_dif_F,'descuento':descuento}, context_instance=RequestContext(request))
 
