@@ -20,9 +20,10 @@
           <th>Nombre</th>
           <th>Fecha Inicio</th>
           <th>Hora Inicio</th>
+<!--
           <th>Editar</th>
           <th>Eliminar</th>
-
+-->
         </tr>
       </thead>   
       <tbody>
@@ -32,11 +33,13 @@
           <td>{{control.usuario}}</td>
           <td>{{control.fecha_ingreso}}</td>
           <td>{{control.hora_ingreso}}</td>
+<!--          
           <td><a class="edit" href="">Editar</a></td>
           <td>
           	<input type="hidden" value="{{control.id}}">
           	<a class="eliminar" >Eliminar</a>
           </td>
+--> 
         </tr>
         {% endfor %}
       </tbody>

@@ -58,27 +58,56 @@ def graficos_incidencias(request, id_usuario):
 	turno=Turno.objects.get(pk=usuario.turno_id)
 	
 	meses =['Enero','Febrero']
-	cantidades=[]
+	cantidadesT=[]
 	horaTurno=turno.hora_turno
-	print horaTurno
 
-	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000').count()
-	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-03', hora_ingreso__startswith='00:00:00.000000').count()
+	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-01', hora_ingreso__startswith='00:00:00.000000').count()
+	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000').count()
 	
-	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
-	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-03').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
-	
-	print control_Enero_tard
+	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-01').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
+	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
 
-	cantidades.append([])
-	cantidades[0]=control_Enero_faltas+control_Enero_tard
-	cantidades.append([])
-	cantidades[1]=control_Febrero_faltas+control_Febrero_tard		
+	cantidadesT.append([])
+	cantidadesT[0]=control_Enero_faltas+control_Enero_tard
+	cantidadesT.append([])
+	cantidadesT[1]=control_Febrero_faltas+control_Febrero_tard		
 	
-	cantXMes=dict(zip(meses,cantidades))
+	cantXMes=dict(zip(meses,cantidadesT))
 	
 
 	return render_to_response('graficos-incidencias.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
+
+def grafico_general(request):
+	control = Control.objects.all()
+	turno=Turno.objects.get(pk=1)
+	
+	meses =['Enero','Febrero']
+	cantidadesT=[]
+	cantidadesF=[]
+	horaTurno=turno.hora_turno
+
+	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-01', hora_ingreso__startswith='00:00:00.000000').count()
+	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000').count()
+	
+	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-01').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
+	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno).count()
+	
+
+	cantidadesT.append([])
+	cantidadesT[0]=control_Enero_tard
+	cantidadesT.append([])
+	cantidadesT[1]=control_Febrero_tard		
+	cant=dict(zip(meses,cantidadesT))
+	cantidadesF.append([])
+	cantidadesF[0]=control_Enero_faltas
+	cantidadesF.append([])
+	cantidadesF[1]=control_Febrero_faltas	
+	cantXMes=dict(zip(cant,cantidadesF))
+	
+	print cantXMes
+
+	return render_to_response('grafico_general.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
+
 
 
 def reporte_incidencias(request, id_usuario):
@@ -91,22 +120,21 @@ def reporte_incidencias(request, id_usuario):
 	dif_minutos_Febrero=[]
 	horaTurno=turno.hora_turno
 
-	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000')
-	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-03', hora_ingreso__startswith='00:00:00.000000')
+	control_Enero_faltas=control.filter(fecha_ingreso__startswith='2013-01', hora_ingreso__startswith='00:00:00.000000')
+	control_Febrero_faltas=control.filter(fecha_ingreso__startswith='2013-02', hora_ingreso__startswith='00:00:00.000000')
 	
-	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
-	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-03').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
+	control_Enero_tard=control.filter(fecha_ingreso__startswith='2013-01').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
+	control_Febrero_tard=control.filter(fecha_ingreso__startswith='2013-02').exclude(hora_ingreso__startswith='00:00:00.000000').filter(hora_ingreso__gt=horaTurno)
 	
 	
-	cantXE_T=control_Enero_tard.count()
-	cantXF_T=control_Febrero_tard.count()
-	cantXE_F=control_Enero_faltas.count()
-	cantXF_F=control_Febrero_faltas.count()
+	cantXE_TF=control_Enero_tard.count() +control_Enero_faltas.count()
+	cantXF_TF=control_Febrero_tard.count() + control_Febrero_faltas.count()
+
 
 	descuento=Descuento.objects.get(pk=1)
 
-	minutosTotales=control_Enero_faltas.count()*8*60
-
+	minutosTotalesE=control_Enero_faltas.count()*8*60
+	minutosTotalesF=control_Febrero_faltas.count()*8*60
 	
 	j=0
 
@@ -122,14 +150,14 @@ def reporte_incidencias(request, id_usuario):
 		minutos=dif_hora*60 + dif_min
 		dif_minutos_Enero.append([])
 		dif_minutos_Enero[j]=minutos
-		minutosTotales+=minutos
+		minutosTotalesE+=minutos
 
 		j=j+1
 	j=0
 
-	descuento_E=descuento.porcentaje*minutosTotales*int(usuario.sueldo)/100
+	descuento_E=descuento.porcentaje*minutosTotalesE*int(usuario.sueldo)/100
 	sueldo_Real_E=int(usuario.sueldo)-descuento_E
-	print sueldo_Real_E
+
 
 	for i in control_Febrero_tard:
 		hora_ingreso=i.hora_ingreso.hour
@@ -142,13 +170,18 @@ def reporte_incidencias(request, id_usuario):
 		minutos=dif_hora*60 + dif_min
 		dif_minutos_Febrero.append([])
 		dif_minutos_Febrero[j]=minutos
+		minutosTotalesF+=minutos		
 		j=j+1
 
+	descuento_F=descuento.porcentaje*minutosTotalesF*int(usuario.sueldo)/100
+	sueldo_Real_F=int(usuario.sueldo)-descuento_F	
+
 	control_dif_E=dict(zip(dif_minutos_Enero,control_Enero_tard))
+	control_dif_F=dict(zip(dif_minutos_Febrero,control_Febrero_tard))
 
 	
 
-	return render_to_response('reporte-incidencias.html',{'sueldo_Real_E':sueldo_Real_E,'cantXE_T':cantXE_T,'minutosTotales':minutosTotales,'descuento_E':descuento_E,'usuario':usuario,'CEF':control_Enero_faltas,'CFF':control_Febrero_faltas,'CFT':control_Febrero_tard,'control_dif_E':control_dif_E,'DMF':dif_minutos_Febrero,'descuento':descuento}, context_instance=RequestContext(request))
+	return render_to_response('reporte-incidencias.html',{'sueldo_Real_E':sueldo_Real_E,'sueldo_Real_F':sueldo_Real_F,'minutosTotalesE':minutosTotalesE,'minutosTotalesF':minutosTotalesF,'descuento_E':descuento_E,'descuento_F':descuento_F,'usuario':usuario,'CEF':control_Enero_faltas,'CFF':control_Febrero_faltas,'control_dif_E':control_dif_E,'control_dif_F':control_dif_F,'descuento':descuento}, context_instance=RequestContext(request))
 
 def agregar_descuento(request):
 	dato = "hola"
@@ -239,12 +272,6 @@ def registrar_controles(request):
 		formulario = ControlForm()
 	return render_to_response('registrar-control.html', {'formulario':formulario}, context_instance=RequestContext(request))
 
-def registrar_usuario(request):
-	if request.method == 'POST':
-		formulario = RegistrarUsuarioForm(request.POST)
-		#Hay diferencia entre is_valid() y is_valid, mientras que el primero valida mostrando los errores el ultimo no muestra los errores.
-		if formulario.is_valid():
-			formulario.save()
 
 def turno(request):
 	turno = Turno.objects.all()
@@ -282,8 +309,11 @@ def edit_nombre(request):
 	return HttpResponse(True)
 
 def usuarios(request):
-	usuarios = User.objects.all()
-	return render_to_response('usuarios.html', {'usuarios':usuarios}, context_instance=RequestContext(request))
+	
+	usuariosG = User.objects.all().filter(is_active=True).exclude(is_superuser=True)
+	usuariosA = User.objects.all()
+
+	return render_to_response('usuarios.html', {'usuariosG':usuariosG,'usuariosA':usuariosA}, context_instance=RequestContext(request))
 
 
 def registrar_usuario(request):

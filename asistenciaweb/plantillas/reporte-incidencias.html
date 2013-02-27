@@ -5,9 +5,16 @@
 {% endblock titulo %}
 
 {% block contenido %}
+  <div>
+    <h2>
+      <center>
+        Reporte de incidencias: Control de Asistencia
+      </center>
+    </h2>
+  </div>
   
-  <h2>2013-02</h2>
-    <h3>Reporte de incidencias: Control de Asistencia </h3>
+  <div>
+    <h3> 2013 - Enero </h3>
       <div class="box-content">
           <table class="table table-striped table-bordered" id="example">
             <thead>
@@ -33,21 +40,95 @@
                 <td>F</td>
                 <td>{{value.fecha_ingreso}}</td> 
                 <td>-</td>                 
-                <td>-</td>                  
+                <td>480</td>                  
               </tr>
               {% endfor %}
             </tbody>
           </table>
-      </div> 
-    <p>{{cantXE_T}}</p>    
-    <p>Sueldo Fijo(s/.): {{usuario.sueldo}}</p>
-    <p>Descuento(%) por min: {{descuento.porcentaje}}</p>
-    <p>Minutos Totales: {{minutosTotales}}</p>
-    <p>Descuento(s/.): {{descuento_E}} </p>
-    <p>Sueldo a Cobrar(s/.): {{sueldo_Real_E}}</p>
+      </div>
+      <div class="box-content">
+          <table class="table table-striped table-bordered" >
+            <thead>
+              <tr>
+                <th>Sueldo Fijo(s/.)</th>
+                <th>Descuento(%) por min</th>
+                <th>Minutos Totales</th>
+                <th>Descuento(s/.)</th>
+                <th>Sueldo a Cobrar(s/.)</th>
+              </tr>
+            </thead>   
+            <tbody>
+              <tr>
+                <td>{{usuario.sueldo}}</td>
+                <td>{{descuento.porcentaje}}</td>
+                <td>{{minutosTotalesE}}</td>
+                <td>{{descuento_E}}</td>
+                <td>{{sueldo_Real_E}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+      </div>
+  </div>
+  -->  
+  <div>
 
 
+    <h3> 2013 - Febrero </h3>
+      <div class="box-content">
+          <table class="table table-striped table-bordered" id="example">
+            <thead>
+              <tr>
+                <th>T/F</th>
+                <th>Fecha</th>
+                <th>Hora de Ingreso</th>
+                <th>Minutos</th>
+              </tr>
+            </thead>   
+            <tbody>
+              {% for key, value in control_dif_F.iteritems %}
+              <tr>
+                <td>T</td>
+                <td>{{value.fecha_ingreso}}</td> 
+                <td>{{value.hora_ingreso}}</td>                 
+                <td>{{key}}</td>                  
+              </tr>
+              {% endfor %}
 
+              {% for value in CFF %}
+              <tr>
+                <td>F</td>
+                <td>{{value.fecha_ingreso}}</td> 
+                <td>-</td>                 
+                <td>480</td>                  
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+      <div class="box-content">
+          <table class="table table-striped table-bordered" >
+            <thead>
+              <tr>
+                <th>Sueldo Fijo(s/.)</th>
+                <th>Descuento(%) por min</th>
+                <th>Minutos Totales</th>
+                <th>Descuento(s/.)</th>
+                <th>Sueldo a Cobrar(s/.)</th>
+              </tr>
+            </thead>   
+            <tbody>
+              <tr>
+                <td>{{usuario.sueldo}}</td>
+                <td>{{descuento.porcentaje}}</td>
+                <td>{{minutosTotalesF}}</td>
+                <td>{{descuento_F}}</td>
+                <td>{{sueldo_Real_F}}</td>
+              </tr>
 
+            </tbody>
+          </table>
+      </div>
+  </div>  
 {% endblock contenido %}
 

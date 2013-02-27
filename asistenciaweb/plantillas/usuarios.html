@@ -18,10 +18,11 @@ Usuarios
   </div>
 </div>
 
+{% if user.is_superuser %} 
 <div class="box-content">
     <table class="table table-striped table-bordered" id="example">
       <thead>
-        <tr>
+        <tr>          
           <th>Nombres</th>
           <th>Apellidos</th>
           <th>Usuario</th>
@@ -31,10 +32,10 @@ Usuarios
         </tr>
       </thead>   
       <tbody>
-        {% for usuario in usuarios %}
+        {% for usuario in usuariosA %}
         <tr>
           <td>{{usuario.first_name}}</td>
-          <td>{{usuario.last_name}}</td>
+          <td>{{usuario.last_name}}</td>           
           <td>{{usuario.username}}</td>
           <td>{{usuario.email}}</td>
           <td>
@@ -43,43 +44,55 @@ Usuarios
             {% else %} 
               Inactivo
             {% endif %}
-              
-
-          </td>
-          
+          </td>          
           <td class="center" style="width:250px; text-align:center;">
-          {% if user.is_superuser %}
-            <button class="btn btn-success mostrar" value="{{usuario.id}}" >
-            
+            <button class="btn btn-success mostrar" value="{{usuario.id}}" >         
             <i class="icon-zoom-in icon-white"></i>
             </button>
             <a class="btn btn-info" href="/usuarios/editar/{{usuario.id}}">
-
               <i class="icon-edit icon-white"></i>
             </a>
-<!--          
-            <a class="btn btn-danger" href="/usuarios/{{usuario.id}}/perfiles">
-              <i class="icon-user icon-white"></i>
-            </a>
--->
             <button class="btn btn-danger cambiar" value="{{usuario.id}}"><i class="icon-white icon-refresh"></i></button>
             <a class="btn btn-warning " href="/usuarios/reporte/{{usuario.id}}">
               <i class="icon-list-alt icon-white"></i>
-            </a>
-          {% endif %}  
+            </a> 
              <a class="btn btn-warning " href="/usuarios/graficar/{{usuario.id}}">
               <i class="icon-signal icon-white"></i>
-            </a>
-
-
-            
+            </a>    
             <!--<a class="btn btn-warning"><i class="icon-white icon-refresh"></i></a>-->
           </td> 
         </tr>
         {% endfor %}
       </tbody>
     </table>
- </div> 
+  </div>        
+{% else %}
+  <div class="box-content">
+    <table class="table table-striped table-bordered" id="example">
+      <thead>
+        <tr>      
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Acciones</th>          
+       </tr>
+      </thead>   
+      <tbody> 
+        {% for usuario in usuariosG %}
+        <tr>
+          <td>{{usuario.first_name}}</td>
+          <td>{{usuario.last_name}}</td>         
+          <td class="center" style="width:250px; text-align:center;">
+             <a class="btn btn-warning " href="/usuarios/graficar/{{usuario.id}}">
+              <i class="icon-signal icon-white"></i>
+            </a>   
+            <!--<a class="btn btn-warning"><i class="icon-white icon-refresh"></i></a>-->
+          </td> 
+        </tr>
+        {% endfor %} 
+      </tbody>
+    </table>     
+  </div>
+{% endif %} 
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-header">      
