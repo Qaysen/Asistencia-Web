@@ -94,22 +94,24 @@ def grafico_general(request):
 	
 
 	cantidadesT.append([])
-	cantidadesT[0]=control_Enero_tard
+	cantidadesT[0] = control_Enero_tard
 	cantidadesT.append([])
-	cantidadesT[1]=control_Febrero_tard		
+	cantidadesT[1] = control_Febrero_tard		
 	cant=dict(zip(meses,cantidadesT))
 	
 	cantidadesF.append([])
-	cantidadesF[0]=control_Enero_faltas
+	cantidadesF[0] = control_Enero_faltas
 	cantidadesF.append([])
-	cantidadesF[1]=control_Febrero_faltas	
+	cantidadesF[1] = control_Febrero_faltas	
 	
-	cantXMes=dict(zip(cantidadesF,cant))
+	cantidades = list(zip(cantidadesF,cantidadesT))
+
+	cantidadesM = dict(zip(meses, cantidades))
 	print cant['Enero']
 	print cant['Febrero']
-	print cantXMes
+	print cantidadesM
 
-	return render_to_response('grafico_general.html',{'cantXMes':cantXMes}, context_instance=RequestContext(request))
+	return render_to_response('grafico_general.html',{'cantXMes':cantidadesM}, context_instance=RequestContext(request))
 
 
 

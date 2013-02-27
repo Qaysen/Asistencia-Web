@@ -19,7 +19,7 @@
           ['Mes', 'Tardanzas','Faltas'],
 
           {% for key, value in cantXMes.iteritems %}
-          ['{{value}}', {{value['iteritems']},{{key}}],           
+          ['{{key}}', {{value.0}}, {{value.1}}],           
 
           {% endfor %}
           
