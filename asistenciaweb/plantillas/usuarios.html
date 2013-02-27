@@ -46,8 +46,9 @@ Usuarios
               
 
           </td>
-
+          
           <td class="center" style="width:250px; text-align:center;">
+          {% if user.is_superuser %}
             <button class="btn btn-success mostrar" value="{{usuario.id}}" >
             
             <i class="icon-zoom-in icon-white"></i>
@@ -62,14 +63,15 @@ Usuarios
             </a>
 -->
             <button class="btn btn-danger cambiar" value="{{usuario.id}}"><i class="icon-white icon-refresh"></i></button>
-
+            <a class="btn btn-warning " href="/usuarios/reporte/{{usuario.id}}">
+              <i class="icon-list-alt icon-white"></i>
+            </a>
+          {% endif %}  
              <a class="btn btn-warning " href="/usuarios/graficar/{{usuario.id}}">
               <i class="icon-signal icon-white"></i>
             </a>
 
-            <a class="btn btn-warning " href="/usuarios/reporte/{{usuario.id}}">
-              <i class="icon-list-alt icon-white"></i>
-            </a>
+
             
             <!--<a class="btn btn-warning"><i class="icon-white icon-refresh"></i></a>-->
           </td> 

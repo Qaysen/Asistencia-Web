@@ -10,7 +10,7 @@
   <h2><i class="icon-user"></i><span class="break"></span>Controles</h2>
   <div class="box-icon">
     <span class="break"></span>
-    <a id="new"><i class="icon-thumbs-down"></i>Nuevo Control</a>
+<!--    <a id="new"><i class="icon-thumbs-down"></i>Nuevo Control</a>  -->
   </div>
 </div>
 <div class="box-content">
@@ -20,10 +20,13 @@
           <th>Nombre</th>
           <th>Fecha Inicio</th>
           <th>Hora Inicio</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+
         </tr>
       </thead>   
       <tbody>
-      	<tr></tr>
+      	
         {% for control in controles %}
         <tr>
           <td>{{control.usuario}}</td>
