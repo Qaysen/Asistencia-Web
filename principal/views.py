@@ -107,9 +107,6 @@ def grafico_general(request):
 	cantidades = list(zip(cantidadesF,cantidadesT))
 
 	cantidadesM = dict(zip(meses, cantidades))
-	print cant['Enero']
-	print cant['Febrero']
-	print cantidadesM
 
 	return render_to_response('grafico_general.html',{'cantXMes':cantidadesM}, context_instance=RequestContext(request))
 
